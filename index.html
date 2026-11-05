@@ -30,9 +30,14 @@
         <p class="text-xs text-slate-400">Official Stand Lucky Prize Draw</p>
       </div>
     </div>
-    <button id="manualResetBtn" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300">
-      Reset Screen
-    </button>
+    <div class="flex items-center gap-2">
+      <button id="exportCsvBtn" type="button" disabled class="text-xs bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-1.5 rounded text-white">
+        Export CSV (0)
+      </button>
+      <button id="manualResetBtn" type="button" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded text-slate-300">
+        Reset Screen
+      </button>
+    </div>
   </header>
 
   <!-- Main Content -->
@@ -82,6 +87,8 @@
           <button type="submit" id="submitBtn" class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all text-base mt-2">
             Confirm & Spin the Wheel 🎰
           </button>
+          <p id="storageMessage" role="alert" class="hidden text-sm text-red-300"></p>
+          <p class="text-xs text-slate-500">Entries are saved only in this browser on this device. Download the CSV before clearing browser data or switching devices.</p>
         </form>
       </div>
 
@@ -98,7 +105,6 @@
         <h3 class="text-2xl font-bold text-white">Congratulations!</h3>
         <p class="text-slate-300 text-sm">You won:</p>
         <div id="prizeDisplay" class="text-2xl font-extrabold text-amber-400 bg-slate-900/80 py-3 px-4 rounded-xl border border-amber-400/30"></div>
-        <p class="text-xs text-slate-400 pt-2">Please show this screen to our stand representative to collect your prize.</p>
 
         <div class="pt-4 border-t border-slate-700">
           <p class="text-xs text-slate-500">Screen resets automatically in <span id="timerCount" class="font-bold text-slate-300">12</span>s for the next visitor.</p>
@@ -109,15 +115,10 @@
   </main>
 
   <footer class="py-3 text-center text-xs text-slate-500 border-t border-slate-800">
-    Philippines Railway Summit 2026 Stand Animation • Data stored securely within RATP Dev enterprise systems.
+    Philippines Railway Summit 2026 Stand Animation • Entries are stored in this browser and are not uploaded.
   </footer>
 
   <script>
-    // =========================================================================
-    // CONFIGURATION - PASTE YOUR POWER AUTOMATE HTTP POST URL HERE:
-    // =========================================================================
-    const POWER_AUTOMATE_WEBHOOK_URL = "https://defaultb87cc26609c440cc8dfac92e08bf9c.b4.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/31/workflows/25d05ac3f1764c86a7befe1c22628263/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ORdDSE1N47NM8ziLmkPdopCkp4JGJTa5SqxL1IAtKv8";
-
     const PRIZES = [
       { label: "Powerbank", color: "#2563eb" },
       { label: "Executive Pen", color: "#0d9488" },
@@ -176,6 +177,84 @@
     const prizeDisplay = document.getElementById("prizeDisplay");
     const timerCount = document.getElementById("timerCount");
     const manualResetBtn = document.getElementById("manualResetBtn");
+    const exportCsvBtn = document.getElementById("exportCsvBtn");
+    const storageMessage = document.getElementById("storageMessage");
+    const STORAGE_KEY = "railwaySummit2026Entries";
+
+    function loadEntries() {
+      const savedEntries = localStorage.getItem(STORAGE_KEY);
+      if (savedEntries === null) return [];
+
+      const entries = JSON.parse(savedEntries);
+      if (!Array.isArray(entries)) {
+        throw new Error("Saved entry data is not in the expected format.");
+      }
+      return entries;
+    }
+
+    function updateExportButton(entryCount) {
+      exportCsvBtn.textContent = `Export CSV (${entryCount})`;
+      exportCsvBtn.disabled = entryCount === 0;
+    }
+
+    function showStorageError(message) {
+      storageMessage.textContent = message;
+      storageMessage.classList.remove("hidden");
+    }
+
+    function saveEntry(entry) {
+      const entries = loadEntries();
+      entries.push(entry);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+      updateExportButton(entries.length);
+    }
+
+    function csvCell(value) {
+      let text = String(value ?? "");
+      if (/^[\u0000-\u0020]*[=+\-@]/.test(text)) text = `'${text}`;
+      return `"${text.replace(/"/g, '""')}"`;
+    }
+
+    function exportEntries() {
+      try {
+        const entries = loadEntries();
+        if (entries.length === 0) return;
+
+        const rows = [
+          ["Timestamp (UTC)", "Full Name", "Email", "Company / Organization", "Prize", "Marketing Consent"],
+          ...entries.map(entry => [
+            entry.timestamp,
+            entry.name,
+            entry.email,
+            entry.company,
+            entry.prize,
+            entry.marketingConsent ? "Yes" : "No"
+          ])
+        ];
+        const csv = "\uFEFF" + rows.map(row => row.map(csvCell).join(",")).join("\r\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+        const downloadUrl = URL.createObjectURL(blob);
+        const downloadLink = document.createElement("a");
+        downloadLink.href = downloadUrl;
+        downloadLink.download = `railway-summit-spins-${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
+        setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+      } catch (error) {
+        showStorageError("Could not export the saved entries. Keep this browser open and contact the event administrator.");
+        console.error("CSV export error:", error);
+      }
+    }
+
+    try {
+      updateExportButton(loadEntries().length);
+    } catch (error) {
+      showStorageError("Could not read saved entries from this browser. Do not continue collecting entries until the data issue is resolved.");
+      console.error("Saved entry read error:", error);
+    }
+
+    exportCsvBtn.addEventListener("click", exportEntries);
 
     leadForm.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -187,6 +266,23 @@
 
       const winningIndex = Math.floor(Math.random() * numSegments);
       const wonPrize = PRIZES[winningIndex].label;
+      const consent = document.getElementById("inputConsent").checked;
+
+      try {
+        saveEntry({
+          timestamp: new Date().toISOString(),
+          name: name,
+          email: email,
+          company: company,
+          prize: wonPrize,
+          marketingConsent: consent
+        });
+        storageMessage.classList.add("hidden");
+      } catch (error) {
+        showStorageError("This entry could not be saved on this device, so the spin was not started. Export existing entries or contact the event administrator.");
+        console.error("Saved entry write error:", error);
+        return;
+      }
 
       formSection.classList.add("hidden");
       spinningSection.classList.remove("hidden");
@@ -199,20 +295,6 @@
 
       canvas.style.transition = "transform 5s cubic-bezier(0.12, 0.8, 0.33, 1)";
       canvas.style.transform = `rotate(${totalRotationDeg}deg)`;
-
-      // Transmit to Microsoft Power Automate
-      if (POWER_AUTOMATE_WEBHOOK_URL && !POWER_AUTOMATE_WEBHOOK_URL.includes("PASTE_YOUR")) {
-        fetch(POWER_AUTOMATE_WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: name,
-            email: email,
-            company: company,
-            prize: wonPrize
-          })
-        }).catch(err => console.error("Transmission error:", err));
-      }
 
       setTimeout(() => {
         isSpinning = false;
