@@ -4,516 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Philippines Railway Summit 2026 | Lucky Spin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root {
-      --navy: #304c96;
-      --navy-deep: #243d7c;
-      --teal: #23a990;
-      --teal-deep: #087e70;
-      --ink: #263445;
-      --muted: #647384;
-      --line: #dce4e9;
-      --paper: #f4f7f8;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      min-height: 100vh;
-      touch-action: manipulation;
-      user-select: none;
-      -webkit-user-select: none;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: "Segoe UI", Arial, sans-serif;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    button {
-      transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
-    }
-
-    .site-header {
-      min-height: 94px;
-      padding: 14px clamp(20px, 5vw, 72px);
-      background: #fff;
-      border-top: 4px solid var(--teal);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .brand-lockup {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .brand-logo {
-      display: block;
-      width: 184px;
-      height: auto;
-    }
-
-    .brand-divider {
-      width: 1px;
-      height: 42px;
-      background: var(--line);
-    }
-
-    .brand-event {
-      margin: 0;
-      color: var(--navy);
-      font-size: 15px;
-      font-weight: 650;
-      letter-spacing: 0.01em;
-    }
-
-    .header-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 9px;
-    }
-
-    .header-button {
-      min-height: 38px;
-      padding: 0 14px;
-      border: 1px solid var(--line);
-      border-radius: 5px;
-      background: #fff;
-      color: var(--navy);
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .header-button:hover:not(:disabled) {
-      border-color: var(--navy);
-      background: #f4f7fb;
-    }
-
-    .header-button--primary {
-      border-color: var(--navy);
-      background: var(--navy);
-      color: #fff;
-    }
-
-    .header-button--primary:hover:not(:disabled) {
-      border-color: var(--navy-deep);
-      background: var(--navy-deep);
-    }
-
-    .header-button--export {
-      border-color: var(--teal-deep);
-      background: var(--teal-deep);
-      color: #fff;
-    }
-
-    .header-button--export:hover:not(:disabled) {
-      border-color: #06695e;
-      background: #06695e;
-    }
-
-    .header-button:disabled {
-      cursor: not-allowed;
-      opacity: 0.48;
-    }
-
-    .settings-panel {
-      margin: 22px auto 0;
-      border: 1px solid var(--line);
-      border-top: 3px solid var(--teal);
-      border-radius: 2px;
-    }
-
-    .settings-title {
-      color: var(--navy);
-    }
-
-    .settings-row {
-      padding-bottom: 12px;
-      border-bottom: 1px solid #edf1f3;
-    }
-
-    .settings-label {
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .settings-input {
-      min-height: 40px;
-      border-color: #cbd6de;
-      border-radius: 5px;
-    }
-
-    .page-main {
-      display: grid;
-      width: min(1560px, calc(100% - 80px));
-      margin: 0 auto;
-      padding: 22px 0 30px;
-      grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
-      align-items: center;
-      gap: 0;
-    }
-
-    .wheel-column {
-      display: flex;
-      min-height: min(700px, calc(100vh - 170px));
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: visible;
-      padding: 20px clamp(12px, 2vw, 32px);
-      color: var(--ink);
-      min-width: 0;
-      text-align: center;
-    }
-
-    .wheel-heading {
-      margin: 0;
-      color: var(--navy);
-      font-size: clamp(30px, 3vw, 42px);
-      font-weight: 700;
-      letter-spacing: -0.025em;
-      line-height: 1.2;
-    }
-
-    .wheel-intro {
-      max-width: 440px;
-      margin: 10px auto 24px;
-      color: #4a5a68;
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    .wheel-frame {
-      position: relative;
-      width: min(100%, min(66vh, 650px));
-      aspect-ratio: 1;
-      margin: 0 auto;
-      padding: 9px;
-      border: 2px solid var(--navy);
-      border-radius: 50%;
-      background: #fff;
-    }
-
-    #wheelCanvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    .wheel-canvas--idle {
-      animation: wheel-idle 60s linear infinite;
-      will-change: transform;
-    }
-
-    @keyframes wheel-idle {
-      from {
-        transform: rotate(var(--idle-start, 0deg));
-      }
-
-      to {
-        transform: rotate(calc(var(--idle-start, 0deg) + 360deg));
-      }
-    }
-
-    .wheel-center-logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      z-index: 3;
-      display: block;
-      width: clamp(76px, 17%, 116px);
-      aspect-ratio: 1;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      background: #fff;
-    }
-
-    .wheel-pointer {
-      position: absolute;
-      top: 50%;
-      right: -14px;
-      z-index: 4;
-      width: 0;
-      height: 0;
-      transform: translateY(-50%);
-      border-top: 18px solid transparent;
-      border-bottom: 18px solid transparent;
-      border-right: 28px solid #72d6c5;
-      filter: drop-shadow(0 2px 3px rgb(0 0 0 / 30%));
-    }
-
-    .prize-sidebar {
-      display: flex;
-      min-height: min(700px, calc(100vh - 170px));
-      flex-direction: column;
-      justify-content: center;
-      padding: 28px clamp(26px, 3vw, 48px);
-      border-left: 1px solid #c8d8d5;
-      background: #eaf3f1;
-    }
-
-    .sidebar-heading {
-      margin: 0;
-      color: var(--navy);
-      font-size: 27px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-
-    .sidebar-description {
-      margin: 7px 0 13px;
-      color: #40564f;
-      font-size: 14px;
-      line-height: 1.55;
-    }
-
-    .attendee-fields {
-      display: grid;
-      gap: 13px;
-      margin-top: 22px;
-    }
-
-    .field-label {
-      display: block;
-      margin-bottom: 6px;
-      color: #344b44;
-      font-size: 13px;
-      font-weight: 650;
-    }
-
-    .form-input {
-      min-height: 48px;
-      border-width: 1px;
-      border-color: #879d96;
-      border-radius: 2px;
-      background: #fff;
-      color: var(--ink);
-      font-size: 16px;
-    }
-
-    .form-input:focus {
-      border-color: var(--teal-deep);
-      outline: 2px solid rgb(8 126 112 / 16%);
-    }
-
-    .consent-label {
-      color: #40564f;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .prize-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .prize-item {
-      display: flex;
-      min-height: 43px;
-      align-items: center;
-      gap: 12px;
-      padding: 7px 0;
-      border-bottom: 1px solid #cadbd7;
-    }
-
-    .prize-swatch {
-      width: 12px;
-      height: 12px;
-      flex: 0 0 auto;
-      border: 1px solid rgb(31 48 67 / 12%);
-    }
-
-    .prize-name {
-      overflow: hidden;
-      color: #293d37;
-      font-size: 15px;
-      font-weight: 600;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .prize-odds {
-      margin-left: auto;
-      color: #40564f;
-      font-size: 14px;
-      font-variant-numeric: tabular-nums;
-      font-weight: 600;
-    }
-
-    .spin-button {
-      min-height: 56px;
-      margin-top: 22px;
-      border: 0;
-      border-radius: 2px;
-      background: var(--teal-deep);
-      box-shadow: none;
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 0;
-    }
-
-    .spin-button:hover {
-      background: #06695e;
-    }
-
-    .spin-button:disabled {
-      cursor: wait;
-      opacity: 0.7;
-    }
-
-    .result-card {
-      margin-top: 24px;
-      padding: 22px 0;
-      border-top: 2px solid var(--teal-deep);
-      text-align: left;
-    }
-
-    .result-title {
-      margin: 0;
-      color: var(--navy);
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .result-prize {
-      margin-top: 10px;
-      color: var(--teal-deep);
-      font-size: 30px;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .result-countdown {
-      margin-top: 14px;
-      color: #40564f;
-      font-size: 13px;
-    }
-
-    .storage-note {
-      margin: 18px 0 0;
-      color: #40564f;
-      font-size: 12px;
-      line-height: 1.55;
-    }
-
-    .site-footer {
-      padding: 17px 20px;
-      border-top: 1px solid var(--line);
-      background: #fff;
-      color: #4e606e;
-      font-size: 11px;
-      letter-spacing: 0.015em;
-      text-align: center;
-    }
-
-    @media (max-width: 800px) {
-      .site-header {
-        align-items: flex-start;
-      }
-
-      .brand-lockup {
-        gap: 14px;
-      }
-
-      .brand-logo {
-        width: 150px;
-      }
-
-      .header-actions {
-        justify-content: flex-start;
-      }
-
-      .page-main {
-        width: min(100% - 32px, 560px);
-        padding: 16px 0 24px;
-        grid-template-columns: 1fr;
-        gap: 8px;
-      }
-
-      .wheel-column {
-        min-height: auto;
-        padding: 18px 18px 26px;
-      }
-
-      .wheel-frame {
-        width: min(100%, 58vh, 390px);
-      }
-
-      .prize-sidebar {
-        min-height: auto;
-        padding: 24px;
-        border-top: 1px solid #c8d8d5;
-        border-left: 0;
-      }
-    }
-
-    @media (max-width: 460px) {
-      .brand-lockup {
-        align-items: flex-start;
-      }
-
-      .brand-logo {
-        width: 122px;
-      }
-
-      .brand-divider {
-        height: 34px;
-      }
-
-      .brand-event {
-        max-width: 175px;
-        font-size: 12px;
-        line-height: 1.4;
-      }
-
-      .header-button {
-        min-height: 35px;
-        padding: 0 10px;
-        font-size: 12px;
-      }
-
-      .page-main {
-        width: calc(100% - 24px);
-      }
-
-      .prize-sidebar {
-        padding: 20px 17px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .wheel-canvas--idle {
-        animation: none;
-      }
-
-      *,
-      *::before,
-      *::after {
-        scroll-behavior: auto !important;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="./assets/app.css" />
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body>
 
   <!-- Header -->
-  <header class="site-header flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
+  <header class="site-header">
     <div class="brand-lockup">
       <img src="./assets/ratpdev-manila-logo.png" alt="RATP Dev Manila" class="brand-logo" />
       <div class="brand-divider" aria-hidden="true"></div>
@@ -523,39 +19,48 @@
       <button id="settingsBtn" type="button" aria-expanded="false" aria-controls="organizerPanel" class="header-button">
         Wheel Setup
       </button>
-      <button id="exportCsvBtn" type="button" disabled class="header-button header-button--export">
-        Export CSV (0)
-      </button>
       <button id="manualResetBtn" type="button" class="header-button">
         Reset Screen
       </button>
     </nav>
   </header>
 
-  <section id="organizerPanel" class="hidden w-full max-w-3xl mx-auto px-4 settings-panel" aria-labelledby="organizerTitle">
-    <div class="bg-white p-5 rounded-lg">
-      <h2 id="organizerTitle" class="settings-title text-xl font-bold">Wheel Setup</h2>
-      <p class="mt-1 text-sm text-gray-600">Set each prize's chance as a percentage. All chances must add up to 100%; set a prize to 0% when it runs out.</p>
-      <p class="mt-1 text-xs text-gray-500">Settings are saved only in this browser on this device. Anyone using this kiosk can open and change them.</p>
-      <div id="prizeRows" class="mt-4 space-y-3"></div>
-      <p id="settingsMessage" role="alert" class="hidden mt-3 text-sm text-red-700"></p>
-      <p id="weightTotal" class="mt-3 text-sm font-semibold text-[#304c96]">Total chance: 100.00%</p>
-      <div class="mt-4 flex flex-wrap gap-2">
+  <section id="organizerPanel" class="hidden settings-panel" aria-labelledby="organizerTitle">
+    <div class="settings-card">
+      <h2 id="organizerTitle" class="settings-title">Wheel Setup</h2>
+      <p class="settings-description">Set each prize's chance as a percentage. All chances must add up to 100%; set a prize to 0% when it runs out.</p>
+      <p class="settings-note">Settings are saved only in this browser on this device. Anyone using this kiosk can open and change them.</p>
+      <div class="settings-divider">
+        <h3 class="settings-subheading">Event results</h3>
+        <p class="settings-entry-description">Spin records are saved in this browser during the event. At the end of the day, download the complete results as a CSV file.</p>
+        <div class="results-actions">
+          <button id="exportCsvBtn" type="button" disabled class="header-button header-button--export">Download results CSV (0)</button>
+        </div>
+        <p id="entryManagementMessage" role="status" aria-live="polite" class="hidden entry-management-message"></p>
+      </div>
+      <div id="prizeRows" class="prize-rows"></div>
+      <p id="settingsMessage" role="alert" class="hidden settings-message"></p>
+      <p id="weightTotal" class="weight-total">Total chance: 100.00%</p>
+      <div class="settings-actions">
         <button id="addPrizeBtn" type="button" class="header-button">Add prize</button>
         <button id="saveSettingsBtn" type="button" class="header-button header-button--export">Save settings</button>
         <button id="cancelSettingsBtn" type="button" class="header-button">Cancel</button>
+      </div>
+      <div class="settings-divider">
+        <h3 class="settings-subheading">Browser-stored entries</h3>
+        <p class="settings-entry-description">Keep this browser and device available until the CSV has been downloaded. Clearing saved entries permanently removes them from this browser.</p>
+        <button id="clearEntriesBtn" type="button" class="header-button clear-entry-button" disabled>Clear saved entries</button>
       </div>
     </div>
   </section>
 
   <!-- Main Content -->
-  <main class="page-main flex-1">
+  <main class="page-main">
 
     <!-- Left: Spin Wheel -->
     <section class="wheel-column" aria-labelledby="wheelHeading">
       <h2 id="wheelHeading" class="wheel-heading">Spin to win</h2>
-      <p class="wheel-intro">Enter your details, then select Spin the wheel.</p>
-      <div class="relative">
+      <div>
         <div class="wheel-frame">
           <canvas id="wheelCanvas" width="700" height="700" role="img" aria-label="Prize wheel" class="wheel-canvas--idle"></canvas>
           <div class="wheel-pointer" aria-hidden="true"></div>
@@ -565,575 +70,58 @@
     </section>
 
     <!-- Prize list and result -->
-    <aside class="prize-sidebar" aria-labelledby="prizeListTitle">
-      <div id="prizeListSection">
-        <h2 id="prizeListTitle" class="sidebar-heading">Prizes</h2>
-        <p class="sidebar-description">Chances are shown beside each prize.</p>
-        <ul id="prizeList" class="prize-list" aria-live="polite"></ul>
+    <aside class="prize-sidebar" aria-labelledby="attendeeTitle">
+      <div id="participantFormSection">
+        <h2 id="attendeeTitle" class="attendee-heading">Your details</h2>
+        <p class="attendee-description">Enter your contact information to take part in the draw.</p>
         <form id="leadForm">
           <div class="attendee-fields">
             <div>
               <label for="inputName" class="field-label">Full name <span aria-hidden="true">*</span></label>
-              <input type="text" id="inputName" required autocomplete="name" class="form-input w-full px-3 py-2 text-sm" />
+              <input type="text" id="inputName" required autocomplete="name" class="form-input" />
             </div>
             <div>
               <label for="inputEmail" class="field-label">Work email <span aria-hidden="true">*</span></label>
-              <input type="email" id="inputEmail" required autocomplete="email" class="form-input w-full px-3 py-2 text-sm" />
+              <input type="email" id="inputEmail" required autocomplete="email" class="form-input" />
             </div>
             <div>
               <label for="inputCompany" class="field-label">Company or organization <span aria-hidden="true">*</span></label>
-              <input type="text" id="inputCompany" required autocomplete="organization" class="form-input w-full px-3 py-2 text-sm" />
+              <input type="text" id="inputCompany" required autocomplete="organization" class="form-input" />
             </div>
-            <label for="inputConsent" class="flex items-start gap-2 cursor-pointer consent-label">
-              <input type="checkbox" id="inputConsent" class="mt-0.5 h-4 w-4 accent-[#087e70]" />
-              <span>I agree to receive railway industry updates and event follow-ups.</span>
+            <label for="inputConsent" class="consent-label">
+              <input type="checkbox" id="inputConsent" />
+              <span>I agree to receive railway industry updates and event follow-ups. This is optional and does not affect entry into the prize draw.</span>
             </label>
           </div>
-          <button type="submit" id="submitBtn" class="spin-button w-full text-white">
+          <button type="submit" id="submitBtn" class="spin-button">
             Spin the wheel
           </button>
         </form>
+        <details class="privacy-notice">
+          <summary>Privacy information</summary>
+          <div class="privacy-copy">
+            <p>This app records the name, work email, organization, prize won, time of the spin, and optional marketing choice. Spin records are stored in this kiosk browser until an organizer downloads them as a CSV. Anyone with access to the device or downloaded file may be able to read them.</p>
+            <p>The event organizer must define how long browser records and downloaded copies are kept, and who is authorized to access them.</p>
+            <p>The form data is stored in this kiosk browser; it is not sent to an event server by this page.</p>
+            <p>Before collecting attendee details, the event organizer must confirm the responsible RATP Dev entity, legal basis and purpose for each use, who will access the browser and CSV file, retention period, and applicable hosting/CDN arrangements. These details are not yet established in this app; this notice is not a confirmation of compliance.</p>
+            <p>For questions or to exercise data-protection rights, contact <a href="mailto:dpo@ratpdev.com">dpo@ratpdev.com</a>. Confirm with the event organizer that this is the applicable DPO contact for this event.</p>
+          </div>
+        </details>
       </div>
       <div id="resultSection" class="result-card hidden" aria-live="polite">
         <h2 class="result-title">You won</h2>
         <div id="prizeDisplay" class="result-prize"></div>
-        <p class="result-countdown">Ready for the next participant in <span id="timerCount" class="font-semibold">12</span>s.</p>
+        <p class="result-countdown">Ready for the next participant in <span id="timerCount">12</span>s.</p>
       </div>
-      <p id="storageMessage" role="alert" aria-live="polite" class="hidden mt-4 text-sm text-red-700"></p>
-      <p class="storage-note">Your details and result stay in this browser. The event team can export them as CSV.</p>
+      <p id="storageMessage" role="alert" aria-live="polite" class="hidden storage-error"></p>
+      <p class="storage-note">Spin results are saved in this browser. Keep the kiosk supervised; organizers can download the event CSV from Wheel Setup.</p>
     </aside>
   </main>
 
   <footer class="site-footer">
-    Philippines Railway Summit 2026 <span aria-hidden="true">·</span> Your details and result are stored in this browser only.
+    Philippines Railway Summit 2026 <span aria-hidden="true">·</span> Spin results are saved on this device.
   </footer>
 
-  <script>
-    const DEFAULT_PRIZES = [
-      { label: "Notebook", weight: 30 },
-      { label: "Pen", weight: 35 },
-      { label: "Umbrella", weight: 5 },
-      { label: "Toiletry bag", weight: 10 },
-      { label: "Tote bag", weight: 20 }
-    ];
-    const LEGACY_DEFAULT_PRIZES = [
-      { label: "Umbrella", weight: 5 },
-      { label: "Notebook", weight: 30 },
-      { label: "Pen", weight: 35 },
-      { label: "Sponge Bag", weight: 10 },
-      { label: "Eco bag", weight: 20 }
-    ];
-    const PREVIOUS_DEFAULT_PRIZE_SETS = [
-      LEGACY_DEFAULT_PRIZES,
-      [
-        { label: "Umbrella", weight: 10 },
-        { label: "Notebook", weight: 30 },
-        { label: "Pen", weight: 30 },
-        { label: "Sponge Bag", weight: 10 },
-        { label: "Eco bag", weight: 20 }
-      ]
-    ];
-    const PREVIOUS_DEFAULT_PRIZES = ["Powerbank", "Executive Pen", "Railway Pin", "Notebook", "Water Bottle", "Tech Pouch"];
-    const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
-
-    const canvas = document.getElementById("wheelCanvas");
-    const ctx = canvas.getContext("2d");
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let isSpinning = false;
-    let autoResetTimer = null;
-    let prizes = DEFAULT_PRIZES.map(prize => ({ ...prize }));
-    let editorPrizes = [];
-    let prizeSettingsLoaded = true;
-
-    function currentWheelAngle() {
-      const transform = getComputedStyle(canvas).transform;
-      if (transform === "none") return 0;
-      const matrix = new DOMMatrixReadOnly(transform);
-      return (Math.atan2(matrix.b, matrix.a) * 180 / Math.PI + 360) % 360;
-    }
-
-    function pauseIdleWheel() {
-      const angle = currentWheelAngle();
-      canvas.classList.remove("wheel-canvas--idle");
-      canvas.style.transition = "none";
-      canvas.style.transform = `rotate(${angle}deg)`;
-      void canvas.offsetWidth;
-      return angle;
-    }
-
-    function resumeIdleWheel() {
-      const angle = currentWheelAngle();
-      canvas.classList.remove("wheel-canvas--idle");
-      canvas.style.transition = "none";
-      canvas.style.transform = "";
-      canvas.style.setProperty("--idle-start", `${angle}deg`);
-      void canvas.offsetWidth;
-      if (!prefersReducedMotion.matches) {
-        canvas.classList.add("wheel-canvas--idle");
-      }
-    }
-
-    function drawWheel() {
-      const radius = canvas.width / 2;
-      const activePrizes = prizes.filter(prize => prize.weight > 0);
-      const totalWeight = activePrizes.reduce((total, prize) => total + prize.weight, 0);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      let segmentStart = 0;
-      for (let i = 0; i < activePrizes.length; i++) {
-        const segmentAngle = 2 * Math.PI * (activePrizes[i].weight / totalWeight);
-        const angle = segmentStart;
-        ctx.beginPath();
-        ctx.fillStyle = PRIZE_COLORS[i % PRIZE_COLORS.length];
-        ctx.moveTo(radius, radius);
-        ctx.arc(radius, radius, radius, angle, angle + segmentAngle);
-        ctx.lineTo(radius, radius);
-        ctx.fill();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = "#ffffff";
-        ctx.stroke();
-
-        const availableTextWidth = 2 * (radius - 30) * Math.sin(Math.min(segmentAngle, Math.PI) / 2);
-        if (availableTextWidth >= 48) {
-          const middleAngle = angle + segmentAngle / 2;
-          const flipText = Math.cos(middleAngle) < 0;
-          ctx.save();
-          ctx.translate(radius, radius);
-          ctx.rotate(flipText ? middleAngle + Math.PI : middleAngle);
-          ctx.textAlign = flipText ? "left" : "right";
-          ctx.fillStyle = "#ffffff";
-          ctx.font = "600 17px 'Segoe UI', Arial, sans-serif";
-          ctx.fillText(activePrizes[i].label, flipText ? 27 - radius : radius - 27, -2, availableTextWidth - 8);
-          ctx.font = "600 13px 'Segoe UI', Arial, sans-serif";
-          ctx.fillText(`${activePrizes[i].weight}%`, flipText ? 27 - radius : radius - 27, 17, availableTextWidth - 8);
-          ctx.restore();
-        }
-        segmentStart += segmentAngle;
-      }
-
-      ctx.beginPath();
-      ctx.arc(radius, radius, 30, 0, 2 * Math.PI);
-      ctx.fillStyle = "#ffffff";
-      ctx.fill();
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = "#23a990";
-      ctx.stroke();
-      if (activePrizes.length === 0) {
-        ctx.fillStyle = "#304c96";
-        ctx.font = "bold 16px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("Add a prize", radius, radius + 55);
-      }
-    }
-
-    function renderPrizeList() {
-      prizeList.replaceChildren();
-      prizes.forEach((prize, index) => {
-        const item = document.createElement("li");
-        item.className = "prize-item";
-        const swatch = document.createElement("span");
-        swatch.className = "prize-swatch";
-        swatch.style.backgroundColor = PRIZE_COLORS[index % PRIZE_COLORS.length];
-        swatch.setAttribute("aria-hidden", "true");
-        const name = document.createElement("span");
-        name.className = "prize-name";
-        name.textContent = prize.label;
-        const odds = document.createElement("span");
-        odds.className = "prize-odds";
-        odds.textContent = `${prize.weight}%`;
-        item.append(swatch, name, odds);
-        prizeList.appendChild(item);
-      });
-    }
-
-    const leadForm = document.getElementById("leadForm");
-    const prizeListSection = document.getElementById("prizeListSection");
-    const prizeList = document.getElementById("prizeList");
-    const submitBtn = document.getElementById("submitBtn");
-    const resultSection = document.getElementById("resultSection");
-    const prizeDisplay = document.getElementById("prizeDisplay");
-    const timerCount = document.getElementById("timerCount");
-    const manualResetBtn = document.getElementById("manualResetBtn");
-    const settingsBtn = document.getElementById("settingsBtn");
-    const organizerPanel = document.getElementById("organizerPanel");
-    const prizeRows = document.getElementById("prizeRows");
-    const settingsMessage = document.getElementById("settingsMessage");
-    const weightTotal = document.getElementById("weightTotal");
-    const addPrizeBtn = document.getElementById("addPrizeBtn");
-    const saveSettingsBtn = document.getElementById("saveSettingsBtn");
-    const cancelSettingsBtn = document.getElementById("cancelSettingsBtn");
-    const exportCsvBtn = document.getElementById("exportCsvBtn");
-    const storageMessage = document.getElementById("storageMessage");
-    const STORAGE_KEY = "railwaySummit2026Entries";
-    const PRIZES_STORAGE_KEY = "railwaySummit2026Prizes";
-
-    function validatePrizes(value) {
-      if (!Array.isArray(value) || value.length > 50) {
-        throw new Error("Prize settings must contain between 1 and 50 prizes.");
-      }
-
-      const validatedPrizes = value.map(prize => {
-        if (typeof prize.label !== "string" || !prize.label.trim() ||
-            prize.label.trim().length > 60 ||
-            typeof prize.weight !== "number" || !Number.isFinite(prize.weight) ||
-            prize.weight < 0 || prize.weight > 100) {
-          throw new Error("Each prize needs a name and a percentage between 0 and 100.");
-        }
-        return { label: prize.label.trim(), weight: prize.weight };
-      });
-
-      const totalPercentage = validatedPrizes.reduce((total, prize) => total + prize.weight, 0);
-      if (Math.abs(totalPercentage - 100) > 0.001) {
-        throw new Error(`Prize percentages must total 100%. The current total is ${totalPercentage.toFixed(2)}%.`);
-      }
-      if (!validatedPrizes.some(prize => prize.weight > 0)) {
-        throw new Error("At least one prize must have a weight greater than 0.");
-      }
-      return validatedPrizes;
-    }
-
-    function loadPrizes() {
-      const savedPrizes = localStorage.getItem(PRIZES_STORAGE_KEY);
-      if (savedPrizes === null) return DEFAULT_PRIZES.map(prize => ({ ...prize }));
-
-      const savedPrizeList = JSON.parse(savedPrizes);
-      if (!Array.isArray(savedPrizeList) || savedPrizeList.length === 0 || savedPrizeList.length > 50 ||
-          savedPrizeList.some(prize => typeof prize.weight !== "number" || !Number.isFinite(prize.weight) || prize.weight < 0)) {
-        throw new Error("Saved prize settings are not in the expected format.");
-      }
-      const matchesPreviousDefaultWeights = PREVIOUS_DEFAULT_PRIZE_SETS.some(previousPrizes =>
-        savedPrizeList.length === previousPrizes.length &&
-        savedPrizeList.every((prize, index) =>
-          prize.label === previousPrizes[index].label &&
-          prize.weight === previousPrizes[index].weight
-        )
-      );
-      const matchesPreviousDefaultNames =
-        savedPrizeList.length === PREVIOUS_DEFAULT_PRIZES.length &&
-        savedPrizeList.every((prize, index) => prize.label === PREVIOUS_DEFAULT_PRIZES[index]);
-      if (matchesPreviousDefaultWeights || matchesPreviousDefaultNames) {
-        return DEFAULT_PRIZES.map(prize => ({ ...prize }));
-      }
-      const savedTotal = savedPrizeList.reduce((total, prize) => total + prize.weight, 0);
-      if (savedTotal <= 0) throw new Error("Saved prize percentages must include at least one active prize.");
-      if (Math.abs(savedTotal - 100) <= 0.001) return validatePrizes(savedPrizeList);
-
-      const normalizedPrizes = savedPrizeList.map(prize => ({
-        ...prize,
-        weight: Number(((prize.weight / savedTotal) * 100).toFixed(2))
-      }));
-      const lastActiveIndex = normalizedPrizes.reduce((lastIndex, prize, index) => prize.weight > 0 ? index : lastIndex, -1);
-      const roundedTotal = normalizedPrizes.reduce((total, prize) => total + prize.weight, 0);
-      normalizedPrizes[lastActiveIndex].weight = Number((normalizedPrizes[lastActiveIndex].weight + 100 - roundedTotal).toFixed(2));
-      return validatePrizes(normalizedPrizes);
-    }
-
-    function loadEntries() {
-      const savedEntries = localStorage.getItem(STORAGE_KEY);
-      if (savedEntries === null) return [];
-
-      const entries = JSON.parse(savedEntries);
-      if (!Array.isArray(entries)) {
-        throw new Error("Saved entry data is not in the expected format.");
-      }
-      return entries;
-    }
-
-    function updateExportButton(entryCount) {
-      exportCsvBtn.textContent = `Export CSV (${entryCount})`;
-      exportCsvBtn.disabled = entryCount === 0;
-    }
-
-    function showStorageError(message) {
-      storageMessage.textContent = message;
-      storageMessage.classList.remove("hidden");
-    }
-
-    function showSettingsError(message) {
-      settingsMessage.textContent = message;
-      settingsMessage.classList.remove("hidden");
-    }
-
-    function renderPrizeEditor() {
-      prizeRows.replaceChildren();
-      editorPrizes.forEach((prize, index) => {
-        const row = document.createElement("div");
-        row.className = "settings-row grid grid-cols-1 sm:grid-cols-[1fr_9rem_auto] gap-2 items-end";
-
-        const nameField = document.createElement("label");
-        nameField.className = "settings-label block";
-        nameField.textContent = "Prize name";
-        const nameInput = document.createElement("input");
-        nameInput.type = "text";
-        nameInput.maxLength = 60;
-        nameInput.required = true;
-        nameInput.value = prize.label;
-        nameInput.dataset.field = "label";
-        nameInput.className = "settings-input mt-1 w-full px-3 py-2 border text-sm text-gray-900";
-        nameField.appendChild(nameInput);
-
-        const weightField = document.createElement("label");
-        weightField.className = "settings-label block";
-        weightField.textContent = "Chance (%)";
-        const weightInput = document.createElement("input");
-        weightInput.type = "number";
-        weightInput.min = "0";
-        weightInput.max = "100";
-        weightInput.step = "0.01";
-        weightInput.required = true;
-        weightInput.value = Number(prize.weight.toFixed(2));
-        weightInput.dataset.field = "weight";
-        weightInput.className = "settings-input mt-1 w-full px-3 py-2 border text-sm text-gray-900";
-        weightInput.addEventListener("input", updateWeightTotal);
-        weightField.appendChild(weightInput);
-
-        const removeButton = document.createElement("button");
-        removeButton.type = "button";
-        removeButton.textContent = "Remove";
-        removeButton.setAttribute("aria-label", `Remove ${prize.label}`);
-        removeButton.className = "px-3 py-2 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm";
-        removeButton.addEventListener("click", () => {
-          if (editorPrizes.length === 1) {
-            showSettingsError("Keep at least one prize in the list. Set its weight to 0 to temporarily disable it when another prize is available.");
-            return;
-          }
-          editorPrizes.splice(index, 1);
-          settingsMessage.classList.add("hidden");
-          renderPrizeEditor();
-        });
-
-        row.append(nameField, weightField, removeButton);
-        prizeRows.appendChild(row);
-      });
-      updateWeightTotal();
-    }
-
-    function updateWeightTotal() {
-      const total = Array.from(prizeRows.children).reduce((sum, row) => {
-        const weightInput = row.querySelector('[data-field="weight"]');
-        return sum + (weightInput.value.trim() ? Number(weightInput.value) : 0);
-      }, 0);
-      weightTotal.textContent = `Total chance: ${total.toFixed(2)}%`;
-      weightTotal.classList.toggle("text-red-700", Math.abs(total - 100) > 0.001);
-      weightTotal.classList.toggle("text-[#304c96]", Math.abs(total - 100) <= 0.001);
-    }
-
-    function closeSettings() {
-      organizerPanel.classList.add("hidden");
-      settingsBtn.setAttribute("aria-expanded", "false");
-      settingsMessage.classList.add("hidden");
-      editorPrizes = [];
-      drawWheel();
-    }
-
-    settingsBtn.addEventListener("click", () => {
-      if (isSpinning) return;
-      const isOpening = organizerPanel.classList.contains("hidden");
-      if (isOpening) {
-        editorPrizes = prizes.map(prize => ({ ...prize }));
-        renderPrizeEditor();
-        organizerPanel.classList.remove("hidden");
-      } else {
-        closeSettings();
-      }
-      settingsBtn.setAttribute("aria-expanded", String(isOpening));
-    });
-
-    addPrizeBtn.addEventListener("click", () => {
-      if (editorPrizes.length >= 50) {
-        showSettingsError("The wheel can have at most 50 prizes.");
-        return;
-      }
-      editorPrizes.push({ label: "New prize", weight: 0 });
-      settingsMessage.classList.add("hidden");
-      renderPrizeEditor();
-    });
-
-    saveSettingsBtn.addEventListener("click", () => {
-      if (isSpinning) return;
-      try {
-        const updatedPrizes = Array.from(prizeRows.children, row => {
-          const weightValue = row.querySelector('[data-field="weight"]').value;
-          if (!weightValue.trim()) throw new Error("Enter a percentage for each prize.");
-          return {
-            label: row.querySelector('[data-field="label"]').value,
-            weight: Number(weightValue)
-          };
-        });
-        const validatedPrizes = validatePrizes(updatedPrizes);
-        localStorage.setItem(PRIZES_STORAGE_KEY, JSON.stringify(validatedPrizes));
-        prizes = validatedPrizes;
-        prizeSettingsLoaded = true;
-        renderPrizeList();
-        closeSettings();
-      } catch (error) {
-        showSettingsError(error instanceof SyntaxError
-          ? "Could not read the saved prize settings. Please check the browser's saved data."
-          : error.message || "Could not save prize settings.");
-        console.error("Prize settings save error:", error);
-      }
-    });
-
-    cancelSettingsBtn.addEventListener("click", closeSettings);
-
-    try {
-      prizes = loadPrizes();
-    } catch (error) {
-      prizeSettingsLoaded = false;
-      showStorageError("Could not load the saved prize settings. Do not collect entries until the wheel settings are corrected.");
-      console.error("Prize settings load error:", error);
-    }
-    drawWheel();
-    renderPrizeList();
-
-    function saveEntry(entry) {
-      const entries = loadEntries();
-      entries.push(entry);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-      updateExportButton(entries.length);
-    }
-
-    function csvCell(value) {
-      let text = String(value ?? "");
-      if (/^[\u0000-\u0020]*[=+\-@]/.test(text)) text = `'${text}`;
-      return `"${text.replace(/"/g, '""')}"`;
-    }
-
-    function exportEntries() {
-      try {
-        const entries = loadEntries();
-        if (entries.length === 0) return;
-
-        const rows = [
-          ["Timestamp (UTC)", "Prize", "Full Name", "Email", "Company / Organization", "Marketing Consent"],
-          ...entries.map(entry => [
-            entry.timestamp,
-            entry.prize,
-            entry.name,
-            entry.email,
-            entry.company,
-            entry.marketingConsent ? "Yes" : "No"
-          ])
-        ];
-        const csv = "\uFEFF" + rows.map(row => row.map(csvCell).join(",")).join("\r\n");
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-        const downloadUrl = URL.createObjectURL(blob);
-        const downloadLink = document.createElement("a");
-        downloadLink.href = downloadUrl;
-        downloadLink.download = `railway-summit-spins-${new Date().toISOString().slice(0, 10)}.csv`;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        downloadLink.remove();
-        setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
-      } catch (error) {
-        showStorageError("Could not export the saved entries. Keep this browser open and contact the event administrator.");
-        console.error("CSV export error:", error);
-      }
-    }
-
-    try {
-      updateExportButton(loadEntries().length);
-    } catch (error) {
-      showStorageError("Could not read saved entries from this browser. Do not continue collecting entries until the data issue is resolved.");
-      console.error("Saved entry read error:", error);
-    }
-
-    exportCsvBtn.addEventListener("click", exportEntries);
-
-    leadForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (isSpinning) return;
-      if (!prizeSettingsLoaded) {
-        showStorageError("Could not load the saved prize settings. Open Wheel Setup and save valid settings before spinning.");
-        return;
-      }
-
-      const name = document.getElementById("inputName").value.trim();
-      const email = document.getElementById("inputEmail").value.trim();
-      const company = document.getElementById("inputCompany").value.trim();
-      const consent = document.getElementById("inputConsent").checked;
-
-      const activePrizes = prizes.filter(prize => prize.weight > 0);
-      const totalWeight = activePrizes.reduce((total, prize) => total + prize.weight, 0);
-      if (activePrizes.length === 0 || !Number.isFinite(totalWeight)) {
-        showStorageError("No valid prizes are available. Open Wheel Setup and correct the prize weights before spinning.");
-        return;
-      }
-      let weightedPick = Math.random() * totalWeight;
-      const winningIndex = activePrizes.findIndex(prize => {
-        weightedPick -= prize.weight;
-        return weightedPick < 0;
-      });
-      const selectedIndex = winningIndex === -1 ? activePrizes.length - 1 : winningIndex;
-      const wonPrize = activePrizes[selectedIndex].label;
-      const angleBeforePrize = activePrizes
-        .slice(0, selectedIndex)
-        .reduce((angle, prize) => angle + (360 * prize.weight / totalWeight), 0);
-      const winningSegmentAngle = 360 * activePrizes[selectedIndex].weight / totalWeight;
-
-      try {
-        saveEntry({
-          timestamp: new Date().toISOString(),
-          name,
-          email,
-          company,
-          prize: wonPrize,
-          marketingConsent: consent
-        });
-        storageMessage.classList.add("hidden");
-      } catch (error) {
-        showStorageError("This entry could not be saved on this device, so the spin was not started. Export existing entries or contact the event administrator.");
-        console.error("Saved entry write error:", error);
-        return;
-      }
-
-      isSpinning = true;
-      submitBtn.disabled = true;
-      manualResetBtn.disabled = true;
-
-      const currentAngle = pauseIdleWheel();
-      const extraSpins = 5;
-      const targetDeg = (360 - ((currentAngle + angleBeforePrize + (winningSegmentAngle / 2)) % 360)) % 360;
-      const totalRotationDeg = currentAngle + (extraSpins * 360) + targetDeg;
-      const spinDuration = prefersReducedMotion.matches ? 250 : 5000;
-
-      settingsBtn.disabled = true;
-      canvas.style.transition = `transform ${spinDuration}ms cubic-bezier(0.12, 0.8, 0.33, 1)`;
-      canvas.style.transform = `rotate(${totalRotationDeg}deg)`;
-
-      setTimeout(() => {
-        isSpinning = false;
-        submitBtn.disabled = false;
-        manualResetBtn.disabled = false;
-        settingsBtn.disabled = false;
-        prizeDisplay.textContent = wonPrize;
-        prizeListSection.classList.add("hidden");
-        resultSection.classList.remove("hidden");
-
-        let countdown = 12;
-        timerCount.textContent = countdown;
-        autoResetTimer = setInterval(() => {
-          countdown--;
-          timerCount.textContent = countdown;
-          if (countdown <= 0) {
-            resetApp();
-          }
-        }, 1000);
-      }, spinDuration + 200);
-    });
-
-    function resetApp() {
-      if (isSpinning) return;
-      if (autoResetTimer) clearInterval(autoResetTimer);
-      leadForm.reset();
-      resumeIdleWheel();
-      resultSection.classList.add("hidden");
-      prizeListSection.classList.remove("hidden");
-      submitBtn.disabled = false;
-      isSpinning = false;
-    }
-
-    manualResetBtn.addEventListener("click", resetApp);
-  </script>
+  <script type="module" src="./assets/app.js"></script>
 </body>
 </html>
