@@ -5,7 +5,7 @@ The markup, app styles, wheel behavior, and CSV export logic live in `index.html
 
 ## Wheel setup
 
-The RATP Dev Manila logo and its navy-and-teal palette are used in the page. Initial prizes are Notebook (30%), Pen (35%), Umbrella (5%), Toiletry bag (10%), and Tote bag (20%). Select **Wheel Setup** on the kiosk to add, remove, or rename prizes and adjust their chances. Percentages must total `100%`; set a prize to `0%` to exclude it from the draw.
+The RATP Dev Manila logo and its navy-and-teal palette are used in the page. Initial prizes are Notebook (30%), Umbrella (5%), Tote bag (20%), Pen (35%), and Toiletry bag (10%). Select **Wheel Setup** on the kiosk to add, remove, or rename prizes and adjust their chances. Percentages must total `100%`; set a prize to `0%` to exclude it from the draw.
 
 Participants enter their full name, work email, and company or organization before spinning; the fields start blank. The optional marketing checkbox does not affect entry into the draw. Spin records are saved in the kiosk browser during the event. At the end of the day, an organizer opens **Wheel Setup** and selects **Download results CSV** to save all collected records as one CSV file.
 

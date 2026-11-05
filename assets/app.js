@@ -1,33 +1,41 @@
 import { serializeEntries } from "./csv-export.js";
 
 const DEFAULT_PRIZES = [
-      { label: "Notebook", weight: 30 },
-      { label: "Pen", weight: 35 },
-      { label: "Umbrella", weight: 5 },
-      { label: "Toiletry bag", weight: 10 },
-      { label: "Tote bag", weight: 20 }
-    ];
-    const LEGACY_DEFAULT_PRIZES = [
-      { label: "Umbrella", weight: 5 },
-      { label: "Notebook", weight: 30 },
-      { label: "Pen", weight: 35 },
-      { label: "Sponge Bag", weight: 10 },
-      { label: "Eco bag", weight: 20 }
-    ];
-    const PREVIOUS_DEFAULT_PRIZE_SETS = [
-      LEGACY_DEFAULT_PRIZES,
-      [
-        { label: "Umbrella", weight: 10 },
-        { label: "Notebook", weight: 30 },
-        { label: "Pen", weight: 30 },
-        { label: "Sponge Bag", weight: 10 },
-        { label: "Eco bag", weight: 20 }
-      ]
-    ];
-    const PREVIOUS_DEFAULT_PRIZES = ["Powerbank", "Executive Pen", "Railway Pin", "Notebook", "Water Bottle", "Tech Pouch"];
-    const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
+  { label: "Notebook", weight: 30 },
+  { label: "Umbrella", weight: 5 },
+  { label: "Tote bag", weight: 20 },
+  { label: "Pen", weight: 35 },
+  { label: "Toiletry bag", weight: 10 }
+];
+const PREVIOUS_DEFAULT_PRIZE_SETS = [
+  [
+    { label: "Notebook", weight: 30 },
+    { label: "Pen", weight: 35 },
+    { label: "Umbrella", weight: 5 },
+    { label: "Toiletry bag", weight: 10 },
+    { label: "Tote bag", weight: 20 }
+  ],
+  [
+    { label: "Umbrella", weight: 5 },
+    { label: "Notebook", weight: 30 },
+    { label: "Pen", weight: 35 },
+    { label: "Sponge Bag", weight: 10 },
+    { label: "Eco bag", weight: 20 }
+  ],
+  [
+    { label: "Umbrella", weight: 10 },
+    { label: "Notebook", weight: 30 },
+    { label: "Pen", weight: 30 },
+    { label: "Sponge Bag", weight: 10 },
+    { label: "Eco bag", weight: 20 }
+  ]
+];
+const PREVIOUS_DEFAULT_PRIZES = ["Powerbank", "Executive Pen", "Railway Pin", "Notebook", "Water Bottle", "Tech Pouch"];
+const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
     const canvas = document.getElementById("wheelCanvas");
     const ctx = canvas.getContext("2d");
+    const labelCanvas = document.getElementById("wheelLabels");
+    const labelCtx = labelCanvas.getContext("2d");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let isSpinning = false;
     let autoResetTimer = null;
@@ -35,6 +43,7 @@ const DEFAULT_PRIZES = [
     let editorPrizes = [];
     let prizeSettingsLoaded = true;
     let entriesAvailable = true;
+    let lastLabelAngle = null;
 
     function currentWheelAngle() {
       const transform = getComputedStyle(canvas).transform;
@@ -84,19 +93,6 @@ const DEFAULT_PRIZES = [
         ctx.strokeStyle = "#ffffff";
         ctx.stroke();
 
-        const availableTextWidth = 2 * (radius - 30) * Math.sin(Math.min(segmentAngle, Math.PI) / 2);
-        if (availableTextWidth >= 48) {
-          const middleAngle = angle + segmentAngle / 2;
-          const flipText = Math.cos(middleAngle) < 0;
-          ctx.save();
-          ctx.translate(radius, radius);
-          ctx.rotate(flipText ? middleAngle + Math.PI : middleAngle);
-          ctx.textAlign = flipText ? "left" : "right";
-          ctx.fillStyle = "#ffffff";
-          ctx.font = "600 17px 'Segoe UI', Arial, sans-serif";
-          ctx.fillText(activePrizes[i].label, flipText ? 27 - radius : radius - 27, -2, availableTextWidth - 8);
-          ctx.restore();
-        }
         segmentStart += segmentAngle;
       }
 
@@ -113,6 +109,43 @@ const DEFAULT_PRIZES = [
         ctx.textAlign = "center";
         ctx.fillText("Add a prize", radius, radius + 55);
       }
+      lastLabelAngle = null;
+      drawWheelLabels();
+    }
+
+    function drawWheelLabels() {
+      const wheelAngle = currentWheelAngle();
+      if (lastLabelAngle !== null && Math.abs((wheelAngle - lastLabelAngle + 540) % 360 - 180) < 0.05) return;
+      lastLabelAngle = wheelAngle;
+
+      const radius = labelCanvas.width / 2;
+      const activePrizes = prizes.filter(prize => prize.weight > 0);
+      const totalWeight = activePrizes.reduce((total, prize) => total + prize.weight, 0);
+      labelCtx.clearRect(0, 0, labelCanvas.width, labelCanvas.height);
+      labelCtx.fillStyle = "#ffffff";
+      labelCtx.font = "600 17px 'Segoe UI', Arial, sans-serif";
+      labelCtx.textAlign = "center";
+      labelCtx.textBaseline = "middle";
+
+      let segmentStart = 0;
+      for (const prize of activePrizes) {
+        const segmentAngle = 2 * Math.PI * (prize.weight / totalWeight);
+        const middleAngle = segmentStart + segmentAngle / 2 + wheelAngle * Math.PI / 180;
+        const labelRadius = radius * 0.7;
+        const availableTextWidth = 2 * labelRadius * Math.sin(Math.min(segmentAngle, Math.PI) / 2) - 12;
+
+        if (availableTextWidth >= 40) {
+          const x = radius + Math.cos(middleAngle) * labelRadius;
+          const y = radius + Math.sin(middleAngle) * labelRadius;
+          labelCtx.fillText(prize.label, x, y, availableTextWidth);
+        }
+        segmentStart += segmentAngle;
+      }
+    }
+
+    function animateWheelLabels() {
+      drawWheelLabels();
+      requestAnimationFrame(animateWheelLabels);
     }
 
     const leadForm = document.getElementById("leadForm");
@@ -358,6 +391,7 @@ const DEFAULT_PRIZES = [
       console.error("Prize settings load error:", error);
     }
     drawWheel();
+    requestAnimationFrame(animateWheelLabels);
     function saveEntries(entries) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
       entriesAvailable = true;

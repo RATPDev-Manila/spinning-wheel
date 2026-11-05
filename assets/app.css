@@ -261,36 +261,6 @@
       display: none !important;
     }
 
-    .privacy-notice {
-      margin-top: 16px;
-      color: #596774;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .privacy-notice summary {
-      color: var(--navy);
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .privacy-copy {
-      display: grid;
-      gap: 8px;
-      margin-top: 8px;
-      text-align: left;
-    }
-
-    .privacy-copy p {
-      margin: 0;
-    }
-
-    .privacy-copy a {
-      color: var(--teal-deep);
-      font-weight: 600;
-      text-decoration: underline;
-    }
-
     .attendee-fields input[type="checkbox"] {
       width: 16px;
       height: 16px;
@@ -347,6 +317,15 @@
       display: block;
       width: 100%;
       height: 100%;
+    }
+
+    #wheelLabels {
+      position: absolute;
+      inset: 9px;
+      z-index: 2;
+      width: calc(100% - 18px);
+      height: calc(100% - 18px);
+      pointer-events: none;
     }
 
     .wheel-canvas--idle {
@@ -505,13 +484,6 @@
       margin-top: 14px;
       color: #40564f;
       font-size: 13px;
-    }
-
-    .storage-note {
-      margin: 18px 0 0;
-      color: #40564f;
-      font-size: 12px;
-      line-height: 1.55;
     }
 
     .site-footer {

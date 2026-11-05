@@ -28,8 +28,8 @@
   <section id="organizerPanel" class="hidden settings-panel" aria-labelledby="organizerTitle">
     <div class="settings-card">
       <h2 id="organizerTitle" class="settings-title">Wheel Setup</h2>
-      <p class="settings-description">Set each prize's chance as a percentage. All chances must add up to 100%; set a prize to 0% when it runs out.</p>
-      <p class="settings-note">Settings are saved only in this browser on this device. Anyone using this kiosk can open and change them.</p>
+      <p class="settings-description">Set each prize's chance. The total must equal 100%. Set unavailable prizes to 0%.</p>
+      <p class="settings-note">Settings are saved only in this browser on this device.</p>
       <div class="settings-divider">
         <h3 class="settings-subheading">Event results</h3>
         <p class="settings-entry-description">Spin records are saved in this browser during the event. At the end of the day, download the complete results as a CSV file.</p>
@@ -48,7 +48,7 @@
       </div>
       <div class="settings-divider">
         <h3 class="settings-subheading">Browser-stored entries</h3>
-        <p class="settings-entry-description">Keep this browser and device available until the CSV has been downloaded. Clearing saved entries permanently removes them from this browser.</p>
+        <p class="settings-entry-description">Saved in this browser. Download the CSV before clearing saved entries.</p>
         <button id="clearEntriesBtn" type="button" class="header-button clear-entry-button" disabled>Clear saved entries</button>
       </div>
     </div>
@@ -63,6 +63,7 @@
       <div>
         <div class="wheel-frame">
           <canvas id="wheelCanvas" width="700" height="700" role="img" aria-label="Prize wheel" class="wheel-canvas--idle"></canvas>
+          <canvas id="wheelLabels" width="700" height="700" aria-hidden="true"></canvas>
           <div class="wheel-pointer" aria-hidden="true"></div>
           <img src="./assets/RoundRATPDev%20Logo.jpg" alt="" aria-hidden="true" class="wheel-center-logo" />
         </div>
@@ -90,23 +91,13 @@
             </div>
             <label for="inputConsent" class="consent-label">
               <input type="checkbox" id="inputConsent" />
-              <span>I agree to receive railway industry updates and event follow-ups. This is optional and does not affect entry into the prize draw.</span>
+              <span>I agree to receive RATP Dev updates and event follow-ups only.</span>
             </label>
           </div>
           <button type="submit" id="submitBtn" class="spin-button">
             Spin the wheel
           </button>
         </form>
-        <details class="privacy-notice">
-          <summary>Privacy information</summary>
-          <div class="privacy-copy">
-            <p>This app records the name, work email, organization, prize won, time of the spin, and optional marketing choice. Spin records are stored in this kiosk browser until an organizer downloads them as a CSV. Anyone with access to the device or downloaded file may be able to read them.</p>
-            <p>The event organizer must define how long browser records and downloaded copies are kept, and who is authorized to access them.</p>
-            <p>The form data is stored in this kiosk browser; it is not sent to an event server by this page.</p>
-            <p>Before collecting attendee details, the event organizer must confirm the responsible RATP Dev entity, legal basis and purpose for each use, who will access the browser and CSV file, retention period, and applicable hosting/CDN arrangements. These details are not yet established in this app; this notice is not a confirmation of compliance.</p>
-            <p>For questions or to exercise data-protection rights, contact <a href="mailto:dpo@ratpdev.com">dpo@ratpdev.com</a>. Confirm with the event organizer that this is the applicable DPO contact for this event.</p>
-          </div>
-        </details>
       </div>
       <div id="resultSection" class="result-card hidden" aria-live="polite">
         <h2 class="result-title">You won</h2>
@@ -114,12 +105,11 @@
         <p class="result-countdown">Ready for the next participant in <span id="timerCount">12</span>s.</p>
       </div>
       <p id="storageMessage" role="alert" aria-live="polite" class="hidden storage-error"></p>
-      <p class="storage-note">Spin results are saved in this browser. Keep the kiosk supervised; organizers can download the event CSV from Wheel Setup.</p>
     </aside>
   </main>
 
   <footer class="site-footer">
-    Philippines Railway Summit 2026 <span aria-hidden="true">·</span> Spin results are saved on this device.
+    Philippines Railway Summit 2026
   </footer>
 
   <script type="module" src="./assets/app.js"></script>
