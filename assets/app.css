@@ -133,20 +133,6 @@
       background: #fff;
     }
 
-    .settings-description,
-    .settings-note,
-    .settings-entry-description {
-      margin: 5px 0 0;
-      color: #596774;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .settings-note {
-      color: #707c87;
-      font-size: 12px;
-    }
-
     .settings-divider {
       margin-top: 20px;
       padding-top: 16px;
@@ -239,10 +225,6 @@
 
     .remove-prize-button:hover:not(:disabled) {
       background: #e5e7eb;
-    }
-
-    .settings-entry-description {
-      font-size: 12px;
     }
 
     .entry-management-message {
