@@ -151,6 +151,7 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
     const leadForm = document.getElementById("leadForm");
     const participantFormSection = document.getElementById("participantFormSection");
     const submitBtn = document.getElementById("submitBtn");
+    const consentCheckbox = document.getElementById("inputConsent");
     const resultSection = document.getElementById("resultSection");
     const prizeDisplay = document.getElementById("prizeDisplay");
     const timerCount = document.getElementById("timerCount");
@@ -249,7 +250,7 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
     }
 
     function updateSpinButton() {
-      submitBtn.disabled = !prizeSettingsLoaded || !entriesAvailable || isSpinning;
+      submitBtn.disabled = !prizeSettingsLoaded || !entriesAvailable || isSpinning || !consentCheckbox.checked;
     }
 
     function showStorageError(message) {
@@ -427,6 +428,7 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
       console.error("Saved entry read error:", error);
     }
     updateSpinButton();
+    consentCheckbox.addEventListener("change", updateSpinButton);
 
     exportCsvBtn.addEventListener("click", exportEntries);
 
@@ -464,7 +466,7 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
       const name = document.getElementById("inputName").value.trim();
       const email = document.getElementById("inputEmail").value.trim();
       const company = document.getElementById("inputCompany").value.trim();
-      const consent = document.getElementById("inputConsent").checked;
+      const consent = consentCheckbox.checked;
 
       const activePrizes = prizes.filter(prize => prize.weight > 0);
       const totalWeight = activePrizes.reduce((total, prize) => total + prize.weight, 0);
