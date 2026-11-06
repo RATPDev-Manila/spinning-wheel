@@ -37,9 +37,13 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
     const labelCanvas = document.getElementById("wheelLabels");
     const labelCtx = labelCanvas.getContext("2d");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const IDLE_WHEEL_CLASS = "wheel-canvas--idle";
     let isSpinning = false;
     let autoResetTimer = null;
+    let labelAnimationFrame = null;
     let prizes = DEFAULT_PRIZES.map(prize => ({ ...prize }));
+    let wheelSegments = [];
+    let totalPrizeWeight = 0;
     let editorPrizes = [];
     let prizeSettingsLoaded = true;
     let entriesAvailable = true;
@@ -54,7 +58,7 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
 
     function pauseIdleWheel() {
       const angle = currentWheelAngle();
-      canvas.classList.remove("wheel-canvas--idle");
+      canvas.classList.remove(IDLE_WHEEL_CLASS);
       canvas.style.transition = "none";
       canvas.style.transform = `rotate(${angle}deg)`;
       void canvas.offsetWidth;
@@ -63,30 +67,37 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
 
     function resumeIdleWheel() {
       const angle = currentWheelAngle();
-      canvas.classList.remove("wheel-canvas--idle");
+      canvas.classList.remove(IDLE_WHEEL_CLASS);
       canvas.style.transition = "none";
       canvas.style.transform = "";
       canvas.style.setProperty("--idle-start", `${angle}deg`);
       void canvas.offsetWidth;
       if (!prefersReducedMotion.matches) {
-        canvas.classList.add("wheel-canvas--idle");
+        canvas.classList.add(IDLE_WHEEL_CLASS);
       }
     }
 
     function drawWheel() {
       const radius = canvas.width / 2;
       const activePrizes = prizes.filter(prize => prize.weight > 0);
-      const totalWeight = activePrizes.reduce((total, prize) => total + prize.weight, 0);
+      totalPrizeWeight = activePrizes.reduce((total, prize) => total + prize.weight, 0);
+      wheelSegments = [];
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       let segmentStart = 0;
-      for (let i = 0; i < activePrizes.length; i++) {
-        const segmentAngle = 2 * Math.PI * (activePrizes[i].weight / totalWeight);
-        const angle = segmentStart;
+      for (const [index, prize] of activePrizes.entries()) {
+        const segmentAngle = 2 * Math.PI * (prize.weight / totalPrizeWeight);
+        wheelSegments.push({
+          prize,
+          startAngle: segmentStart,
+          segmentAngle,
+          startDegrees: segmentStart * 180 / Math.PI,
+          segmentDegrees: segmentAngle * 180 / Math.PI
+        });
         ctx.beginPath();
-        ctx.fillStyle = PRIZE_COLORS[i % PRIZE_COLORS.length];
+        ctx.fillStyle = PRIZE_COLORS[index % PRIZE_COLORS.length];
         ctx.moveTo(radius, radius);
-        ctx.arc(radius, radius, radius, angle, angle + segmentAngle);
+        ctx.arc(radius, radius, radius, segmentStart, segmentStart + segmentAngle);
         ctx.lineTo(radius, radius);
         ctx.fill();
         ctx.lineWidth = 3;
@@ -119,33 +130,50 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
       lastLabelAngle = wheelAngle;
 
       const radius = labelCanvas.width / 2;
-      const activePrizes = prizes.filter(prize => prize.weight > 0);
-      const totalWeight = activePrizes.reduce((total, prize) => total + prize.weight, 0);
       labelCtx.clearRect(0, 0, labelCanvas.width, labelCanvas.height);
       labelCtx.fillStyle = "#ffffff";
       labelCtx.font = "600 17px 'Segoe UI', Arial, sans-serif";
       labelCtx.textAlign = "center";
       labelCtx.textBaseline = "middle";
 
-      let segmentStart = 0;
-      for (const prize of activePrizes) {
-        const segmentAngle = 2 * Math.PI * (prize.weight / totalWeight);
-        const middleAngle = segmentStart + segmentAngle / 2 + wheelAngle * Math.PI / 180;
+      for (const segment of wheelSegments) {
+        const middleAngle = segment.startAngle + segment.segmentAngle / 2 + wheelAngle * Math.PI / 180;
         const labelRadius = radius * 0.7;
-        const availableTextWidth = 2 * labelRadius * Math.sin(Math.min(segmentAngle, Math.PI) / 2) - 12;
+        const availableTextWidth = 2 * labelRadius * Math.sin(Math.min(segment.segmentAngle, Math.PI) / 2) - 12;
 
         if (availableTextWidth >= 40) {
           const x = radius + Math.cos(middleAngle) * labelRadius;
           const y = radius + Math.sin(middleAngle) * labelRadius;
-          labelCtx.fillText(prize.label, x, y, availableTextWidth);
+          labelCtx.fillText(segment.prize.label, x, y, availableTextWidth);
         }
-        segmentStart += segmentAngle;
       }
     }
 
     function animateWheelLabels() {
+      labelAnimationFrame = null;
+      if (document.hidden) return;
+
       drawWheelLabels();
-      requestAnimationFrame(animateWheelLabels);
+      if (isSpinning || (!prefersReducedMotion.matches && canvas.classList.contains(IDLE_WHEEL_CLASS))) {
+        labelAnimationFrame = requestAnimationFrame(animateWheelLabels);
+      }
+    }
+
+    function updateWheelLabelAnimation() {
+      const shouldAnimate = !document.hidden &&
+        (isSpinning || (!prefersReducedMotion.matches && canvas.classList.contains(IDLE_WHEEL_CLASS)));
+      if (shouldAnimate) {
+        if (labelAnimationFrame === null) {
+          labelAnimationFrame = requestAnimationFrame(animateWheelLabels);
+        }
+        return;
+      }
+
+      if (labelAnimationFrame !== null) {
+        cancelAnimationFrame(labelAnimationFrame);
+        labelAnimationFrame = null;
+      }
+      drawWheelLabels();
     }
 
     const leadForm = document.getElementById("leadForm");
@@ -270,7 +298,7 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
         row.className = "settings-row";
 
         const nameField = document.createElement("label");
-        nameField.className = "settings-label block";
+        nameField.className = "settings-label";
         nameField.textContent = "Prize name";
         const nameInput = document.createElement("input");
         nameInput.type = "text";
@@ -282,7 +310,7 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
         nameField.appendChild(nameInput);
 
         const weightField = document.createElement("label");
-        weightField.className = "settings-label block";
+        weightField.className = "settings-label";
         weightField.textContent = "Chance (%)";
         const weightInput = document.createElement("input");
         weightInput.type = "number";
@@ -384,6 +412,18 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
 
     cancelSettingsBtn.addEventListener("click", closeSettings);
 
+    function handleMotionPreferenceChange() {
+      if (prefersReducedMotion.matches) {
+        canvas.classList.remove(IDLE_WHEEL_CLASS);
+      } else if (!isSpinning) {
+        resumeIdleWheel();
+      }
+      updateWheelLabelAnimation();
+    }
+
+    prefersReducedMotion.addEventListener("change", handleMotionPreferenceChange);
+    document.addEventListener("visibilitychange", updateWheelLabelAnimation);
+
     try {
       prizes = loadPrizes();
     } catch (error) {
@@ -392,7 +432,7 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
       console.error("Prize settings load error:", error);
     }
     drawWheel();
-    requestAnimationFrame(animateWheelLabels);
+    updateWheelLabelAnimation();
     function saveEntries(entries) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
       entriesAvailable = true;
@@ -468,19 +508,18 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
       const company = document.getElementById("inputCompany").value.trim();
       const consent = consentCheckbox.checked;
 
-      const activePrizes = prizes.filter(prize => prize.weight > 0);
-      const totalWeight = activePrizes.reduce((total, prize) => total + prize.weight, 0);
-      if (activePrizes.length === 0 || !Number.isFinite(totalWeight)) {
+      if (wheelSegments.length === 0 || !Number.isFinite(totalPrizeWeight)) {
         showStorageError("No valid prizes are available. Open Wheel Setup and correct the prize weights before spinning.");
         return;
       }
-      let weightedPick = Math.random() * totalWeight;
-      const winningIndex = activePrizes.findIndex(prize => {
+      let weightedPick = Math.random() * totalPrizeWeight;
+      const winningIndex = wheelSegments.findIndex(({ prize }) => {
         weightedPick -= prize.weight;
         return weightedPick < 0;
       });
-      const selectedIndex = winningIndex === -1 ? activePrizes.length - 1 : winningIndex;
-      const wonPrize = activePrizes[selectedIndex].label;
+      const selectedIndex = winningIndex === -1 ? wheelSegments.length - 1 : winningIndex;
+      const selectedSegment = wheelSegments[selectedIndex];
+      const wonPrize = selectedSegment.prize.label;
       const entry = {
         timestamp: new Date().toISOString(),
         name,
@@ -489,11 +528,6 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
         prize: wonPrize,
         marketingConsent: consent
       };
-      const angleBeforePrize = activePrizes
-        .slice(0, selectedIndex)
-        .reduce((angle, prize) => angle + (360 * prize.weight / totalWeight), 0);
-      const winningSegmentAngle = 360 * activePrizes[selectedIndex].weight / totalWeight;
-
       try {
         saveEntries([...loadEntries(), entry]);
         storageMessage.classList.add("hidden");
@@ -505,21 +539,23 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
 
       isSpinning = true;
       updateSpinButton();
+      updateWheelLabelAnimation();
       manualResetBtn.disabled = true;
 
       const currentAngle = pauseIdleWheel();
       const extraSpins = 5;
-      const targetDeg = (360 - ((currentAngle + angleBeforePrize + (winningSegmentAngle / 2)) % 360)) % 360;
+      const targetDeg = (360 - ((currentAngle + selectedSegment.startDegrees + (selectedSegment.segmentDegrees / 2)) % 360)) % 360;
       const totalRotationDeg = currentAngle + (extraSpins * 360) + targetDeg;
-      const spinDuration = prefersReducedMotion.matches ? 250 : 5000;
+      const spinDuration = prefersReducedMotion.matches ? 250 : 8000;
 
       settingsBtn.disabled = true;
-      canvas.style.transition = `transform ${spinDuration}ms cubic-bezier(0.12, 0.8, 0.33, 1)`;
+      canvas.style.transition = `transform ${spinDuration}ms cubic-bezier(0.2, 0.8, 0.25, 1)`;
       canvas.style.transform = `rotate(${totalRotationDeg}deg)`;
 
       setTimeout(() => {
         isSpinning = false;
         updateSpinButton();
+        updateWheelLabelAnimation();
         manualResetBtn.disabled = false;
         settingsBtn.disabled = false;
         prizeDisplay.textContent = wonPrize;
@@ -547,6 +583,7 @@ const PRIZE_COLORS = ["#304c96", "#087e70", "#234183", "#0b6f63", "#3b5daa"];
       participantFormSection.classList.remove("hidden");
       isSpinning = false;
       updateSpinButton();
+      updateWheelLabelAnimation();
     }
 
     manualResetBtn.addEventListener("click", resetApp);
